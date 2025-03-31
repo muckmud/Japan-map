@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Japan Vacation Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <style>
+    #map { height: 100vh; width: 100%; }
+    .popup-img { width: 100%; height: auto; border-radius: 8px; margin-bottom: 6px; }
+    .popup-content { font-family: sans-serif; font-size: 14px; }
+    .popup-content ul { padding-left: 20px; margin: 6px 0; }
+    .popup-content h4 { margin: 6px 0; font-size: 16px; }
+  </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<!-- The script below is now fully embedded and working -->
+<script>
+  const map = L.map('map').setView([36.2048, 138.2529], 5);
+
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const locations = [
+    {
+      name: "Tokyo",
+      lat: 35.6762,
+      lon: 139.6503,
+      description: "Japan’s buzzing capital with a futuristic skyline, historic temples, and unbeatable food.",
+      photo: "https://www.advantour.com/img/japan/images/tokyo.jpg",
+      sights: ["Tokyo Tower", "Senso-ji Temple", "Shibuya Crossing", "Meiji Shrine"],
+      hotel: "https://www.booking.com/hotel/jp/tavinos-asakusa.nl.html"
+    },
+    {
+      name: "Nikko",
+      lat: 36.7481,
+      lon: 139.5986,
+      description: "A peaceful town known for lavish shrines, mountain scenery, and waterfalls.",
+      photo: "https://gaijinpot.scdn3.secure.raxcdn.com/app/uploads/sites/6/2019/10/Shinkyo-Bridge-at-Futarasan-Shrine-Nikko-Tochigi-2-1024x701.jpg",
+      sights: ["Toshogu Shrine", "Kegon Falls", "Shinkyo Bridge", "Nikko National Park"],
+      hotel: "https://www.booking.com/hotel/jp/hoteruhuamitetuku-ri-guang-yi-qian-dian.nl.html"
+    },
+    {
+      name: "Hakone",
+      lat: 35.2329,
+      lon: 139.1064,
+      description: "Scenic hot spring town with views of Mt. Fuji and a charming lake cruise.",
+      photo: "https://www.backpackeninazie.nl/wp-content/uploads/2019/01/Hakone-1.jpg",
+      sights: ["Lake Ashi", "Hakone Shrine", "Owakudani Valley", "Open-Air Museum"],
+      hotel: "https://www.booking.com/hotel/jp/guesthouse-azito.nl.html"
+    },
+    {
+      name: "Kyoto",
+      lat: 35.0116,
+      lon: 135.7681,
+      description: "The heart of traditional Japan, filled with temples, gardens, and geisha districts.",
+      photo: "https://reisplaatje.nl/wp-content/uploads/2024/06/Tips-wat-te-doen-Kyoto-Japan-Bezienswaardigheden-en-hoogtepunten-1.jpg",
+      sights: ["Fushimi Inari", "Kinkaku-ji", "Gion", "Arashiyama Bamboo Grove"],
+      hotel: "https://www.booking.com/hotel/jp/daiwa-roynet-kyoto-shijyo-karasuma.nl.html"
+    },
+    {
+      name: "Nara",
+      lat: 34.6851,
+      lon: 135.8048,
+      description: "Home to friendly deer, ancient temples, and serene gardens.",
+      photo: "https://cdn.cheapoguides.com/wp-content/uploads/sites/3/2017/10/Deer-and-Gate-1024x600.jpg",
+      sights: ["Nara Park", "Todai-ji Temple", "Kasuga-taisha Shrine", "Naramachi District"],
+      hotel: ""
+    },
+    {
+      name: "Osaka",
+      lat: 34.6937,
+      lon: 135.5023,
+      description: "A lively city known for food, nightlife, and modern architecture.",
+      photo: "https://www.msccruises.nl/-/media/global-contents/destinations/ports/japan/osaka/cruise-to-osaka-japan.jpg?bc=transparent&as=1&mh=1395&mw=2460&hash=3E9D5F7C9FFB62B1708FA583D306AAD6",
+      sights: ["Osaka Castle", "Dotonbori", "Umeda Sky Building", "Kuromon Market"],
+      hotel: "https://www.booking.com/hotel/jp/gu-ting-jun-ri-ben-qiao-47.nl.html"
+    },
+    {
+      name: "Hiroshima",
+      lat: 34.3853,
+      lon: 132.4553,
+      description: "Historic site of the atomic bomb memorial and gateway to Miyajima Island.",
+      photo: "https://assets.holder.nl/2fe2b47b892143fa811a114edac99aee_assets/files/d58e4a5915900c3e9f7c42b16a18404a-Schermafbeelding_2024-08-26_142643.jpg",
+      sights: ["Peace Park", "Atomic Dome", "Miyajima", "Hiroshima Castle"],
+      hotel: "https://www.booking.com/hotel/jp/sumairuhoteruguang-dao.nl.html"
+    },
+    {
+      name: "Kanazawa",
+      lat: 36.5613,
+      lon: 136.6562,
+      description: "Cultural gem with samurai districts, gardens, and great seafood.",
+      photo: "https://visitkanazawa.jp/lsc/upfile/articleDetail/0000/0904/904_4_xl.jpg",
+      sights: ["Kenrokuen", "21st Century Museum", "Higashi Chaya", "Omicho Market"],
+      hotel: "https://www.booking.com/hotel/jp/intergate-kanazawa.nl.html"
+    },
+    {
+      name: "Tateyama - Shinano-Omachi",
+      lat: 36.5733,
+      lon: 137.6178,
+      description: "Mountain adventure route with snow walls and panoramic alpine views.",
+      photo: "https://www.info-toyama.com/storage/special_features/333/responsive_images/uGfpI8z01Y9zXRQZKzxtxbEmJRnqHDGps6HOQQAb__1756_1169.jpeg",
+      sights: ["Snow Corridor", "Kurobe Dam", "Murodo Plateau", "Alpine Route"],
+      hotel: "https://www.booking.com/hotel/jp/song-xie-wu-gesutohausu.nl.html"
+    },
+    {
+      name: "Matsumoto",
+      lat: 36.2381,
+      lon: 137.9718,
+      description: "Gateway to the Japanese Alps, famous for its black castle and outdoor vibes.",
+      photo: "https://upload.wikimedia.org/wikipedia/commons/3/38/Matsumoto_Castle05s5s4592.jpg",
+      sights: ["Matsumoto Castle", "Yohashira Shrine", "Nawate Street", "Kamikochi"],
+      hotel: "https://www.booking.com/hotel/jp/tabinohoterusong-ben.nl.html"
+    }
+  ];
+
+  const route = [];
+
+  locations.forEach(loc => {
+    const html = `
+      <div class="popup-content">
+        <h4>${loc.name}</h4>
+        <img src="${loc.photo}" alt="${loc.name}" class="popup-img" referrerpolicy="no-referrer"/>
+        <p>${loc.description}</p>
+        <p><strong>Hotel:</strong> ${loc.hotel ? `<a href="${loc.hotel}" target="_blank">${new URL(loc.hotel).hostname}</a>` : "Not specified"}</p>
+        <p><strong>Sights:</strong></p>
+        <ul>${loc.sights.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    `;
+    const marker = L.marker([loc.lat, loc.lon]).addTo(map);
+    marker.bindPopup(html);
+    route.push([loc.lat, loc.lon]);
+  });
+
+  // Close the route by returning to Tokyo
+  route.push([locations[0].lat, locations[0].lon]);
+
+  L.polyline(route, { color: 'blue', weight: 3 }).addTo(map);
+</script>
+</body>
+</html>
